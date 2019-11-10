@@ -1,22 +1,16 @@
 <template>
   <div id="app">
-    <el-row>
-      <el-col :span="24">
-        <div class="grid-content bg-purple-dark">abc</div>
-      </el-col>
-    </el-row>
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to My Vue.js App" />
+    <Share />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Share from './components/share.vue'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    Share
   }
 }
 </script>
@@ -29,5 +23,8 @@ export default {
     text-align: center;
     color: #2c3e50;
     margin-top: 60px;
+  }
+  body{
+    margin:0;
   }
 </style>
