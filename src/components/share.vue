@@ -1,6 +1,6 @@
 <template>
   <div class="share">
-    <div class="share-title">A Little Boy</div>
+    <div class="share-title">{{title}}</div>
     <div class="share-img">
       <img class="background-img" :src="imgUrl" />
     </div>
@@ -32,7 +32,8 @@ export default {
     return {
       data: "",
       imgUrl: "",
-      audioUrl: ""
+      audioUrl: "",
+      title:""
     };
   },
   mounted() {
@@ -55,6 +56,7 @@ export default {
             const data = res.data;
             this.imgUrl = data.data.backImgUrl;
             this.audioUrl = data.data.playUrl;
+            this.title = data.data.title;
           }
         });
     }
