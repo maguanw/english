@@ -1,6 +1,6 @@
 <template>
   <div class="share">
-    <div class="share-title">{{title}}</div>
+    <!-- <div class="share-title">{{title}}</div> -->
     <div class="share-img">
       <img class="background-img" :src="imgUrl" />
     </div>
@@ -8,7 +8,7 @@
       <!-- <audio :src="audioUrl" controls="controls"></audio> -->
       <audio-ui :url="audioUrl"></audio-ui>
     </div>
-    <app-footer :title="'芒果英语'" :des="'下载更多歌曲'"></app-footer>
+    <app-footer :title="'芒果少儿英语'" :des="'下载查看更多绘本'"></app-footer>
   </div>
 </template>
 
