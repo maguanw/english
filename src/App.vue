@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <Share />
+    <!-- <Share /> -->
+     <router-view></router-view>
   </div>
 </template>
 
