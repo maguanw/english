@@ -2,13 +2,13 @@
   <div class="share">
     <div class="share-title">{{title}}</div>
     <div class="share-img">
-      <img class="background-img" :src="imgUrl" />
+      <img :src="imgUrl" class="background-img" />
     </div>
     <div class="share-radio">
       <!-- <audio :src="audioUrl" controls="controls"></audio> -->
       <audio-ui :url="audioUrl"></audio-ui>
     </div>
-    <app-footer :title="'芒果英语'" :des="'下载更多歌曲'"></app-footer>
+    <app-footer :des="'下载更多歌曲'" :title="'芒果英语'"></app-footer>
   </div>
 </template>
 
@@ -16,44 +16,44 @@
 import axios from "axios";
 import AudioUi from './audio-ui.vue'
 import AppFooter from './common/footer.vue'
+import http from '@/utils/http.js'
 
 export default {
   name: "Share",
-  components:{
+  components: {
     AudioUi,
     AppFooter
   },
-  data() {
+  data () {
     return {
       data: "",
       imgUrl: "",
       audioUrl: "",
-      title:""
+      title: ""
     };
   },
-  mounted() {
+  mounted () {
     this.init();
   },
   methods: {
-    init() {
-      this.getInfo();
+    init () {
+      this.getData();
     },
-    getInfo() {
-      let api = `/app/course/song/getSongInfo?songNumber=516730276585983&albumNumber=491293741045759`;
-      axios
-        .get(api, {
-          headers: {
-            "Content-Type": "application/json"
+    getData () {
+      let api = `/app/course/song/getSongInfo`;
+      let params = {
+        songNumber: '516730276585983',
+        albumNumber: '491293741045759',
+      };
+      http.get(api, params)
+        .then((res) => {
+          if (res.code === 0) {
+            const data = res.data;
+            this.imgUrl = data.backImgUrl;
+            this.audioUrl = data.playUrl;
+            this.title = data.title;
           }
         })
-        .then(res => {
-          if (res.status === 200) {
-            const data = res.data;
-            this.imgUrl = data.data.backImgUrl;
-            this.audioUrl = data.data.playUrl;
-            this.title = data.data.title;
-          }
-        });
     }
   }
 };
@@ -61,25 +61,25 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-.share {
-  text-align: center;
-  color: #666;
-  .share-title {
-    font-size: 19pt;
-    margin-bottom: 22pt;
-  }
-  .share-img {
-    display: inline-block;
-    width: 250pt;
-    height: 250pt;
-    border-radius: 50%;
-    background-color: #f2f2f2;
-    .background-img {
-      height: 230pt;
-      width: 230pt;
-      border-radius: 50%;
-      margin-top: 10pt;
+  .share {
+    text-align: center;
+    color: #666;
+    .share-title {
+      font-size: 19pt;
+      margin-bottom: 22pt;
     }
-  }  
-}
+    .share-img {
+      display: inline-block;
+      width: 250pt;
+      height: 250pt;
+      border-radius: 50%;
+      background-color: #f2f2f2;
+      .background-img {
+        height: 230pt;
+        width: 230pt;
+        border-radius: 50%;
+        margin-top: 10pt;
+      }
+    }
+  }
 </style>
