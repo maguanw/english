@@ -1,4 +1,4 @@
-# hello-world
+# English
 
 ## Project setup
 ```
@@ -15,10 +15,16 @@ npm run serve
 npm run build
 ```
 
-### Lints and fixes files
+### 路由
+
 ```
-npm run lint
+默认为 share页面
+
+http://localhost:8080/book 为绘本页面
+
+```
+建议每次拉取代码后执行一遍
+
+cmpn i 
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
