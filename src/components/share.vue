@@ -13,7 +13,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import AudioUi from './audio-ui.vue'
 import AppFooter from './common/footer.vue'
 import http from '@/utils/http.js'
@@ -53,7 +52,7 @@ export default {
             this.audioUrl = data.playUrl;
             this.title = data.title;
           }
-        })
+        });
     }
   }
 };
