@@ -46,7 +46,7 @@ export default {
       this.getInfo();
     },
     getInfo() {
-      let api = `/app/course/book/share`;
+      let api = `/course/service/book/share`;
       let params = {
         number: "541486963491839"
       };

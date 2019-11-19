@@ -17,6 +17,10 @@ module.exports = {
             '/app': {
                 target: 'http://47.94.247.100:9091', //API服务器的地址
                 changeOrigin: true
+            },
+            '/course': {
+                target: 'http://47.94.247.100:9091', //API服务器的地址
+                changeOrigin: true
             }
         }
     },

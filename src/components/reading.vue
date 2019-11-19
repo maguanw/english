@@ -49,14 +49,13 @@ export default {
   },
   methods: {
     init() {
-      // this.getInfo();
+      this.getInfo();
       this.initTest();
     },
     getInfo() {
-      let api = `/app/course/book/share`;
+      let api = `/course/service/book/share`;
       let params = {
-        songNumber: "516730276585983",
-        albumNumber: "491293741045759"
+        number: "541486963491839"
       };
       http.get(api, params).then(res => {
         if (res.code === 0) {
