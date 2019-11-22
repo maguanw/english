@@ -3,7 +3,6 @@ import Router from 'vue-router';
 
 import Share from '@/components/share.vue'
 import Book from '@/components/book.vue'
-import Reading from '@/components/reading.vue'
 
 Vue.use(Router)
 
@@ -23,11 +22,6 @@ export default new Router({
             path: '/share',
             name: 'Share',
             component: Share
-        },
-        {
-            path: '/reading',
-            name: 'Reading',
-            component: Reading
         },
         {
             path: '*',
