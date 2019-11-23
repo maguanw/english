@@ -23,7 +23,7 @@
         <img @click="goBack" src="@/assets/back.png" width="20px" />
       </div>
       <div class="reading-step">{{readingIndex}} / {{data.length}}</div>
-      <div class="reading-swipe">
+      <!-- <div class="reading-swipe">
         <mt-swipe
           :auto="autoTime"
           :continuous="false"
@@ -31,7 +31,6 @@
           @change="handleChange"
         >
           <mt-swipe-item :key="index" v-for="(item,index) in data">
-            <!-- <div class="breading-img">{{item.key}}</div> -->
             <div class="breading-img">
               <img :src="item.backImg" class="background-img" />
             </div>
@@ -39,8 +38,19 @@
           </mt-swipe-item>
         </mt-swipe>
         <audio :src="currentAudio" autoplay id="audio"></audio>
+      </div>-->
+      <div class="reading-swipe">
+        <swiper :options="swiperOption" ref="mySwiper">
+          <swiper-slide :key="index" v-for="(item,index) in data">
+            <div class="breading-img">
+              <img :src="item.backImg" class="background-img" />
+            </div>
+            <div class="reading-name">{{item.value}}</div>
+          </swiper-slide>
+          <audio :src="currentAudio" autoplay id="audio" @ended="audioEnd"></audio>
+        </swiper>
       </div>
-      <div @click="test" class="reading-downlaod" v-if="readingIndex !== data.length">立即下载</div>
+      <div class="reading-downlaod" v-if="readingIndex !== data.length">立即下载</div>
       <div class="reading-downlaod" v-if="readingIndex === data.length">快来和我一起读绘本吧</div>
     </div>
   </div>
@@ -51,6 +61,7 @@ import http from "@/utils/http.js";
 import AudioUi from "./audio-ui.vue";
 import AppFooter from "./common/footer.vue";
 import { Swipe, SwipeItem } from "mint-ui";
+import Swiper from "swiper";
 
 export default {
   name: "Share",
@@ -60,7 +71,7 @@ export default {
     Swipe,
     SwipeItem
   },
-  data () {
+  data() {
     return {
       name: "",
       day: "",
@@ -70,17 +81,28 @@ export default {
       readingIndex: 0,
       autoTime: 6000,
       currentAudio: "",
-      stratReading: false
+      stratReading: false,
+      swiperOption: {
+        on: {
+          slideChange: this.handleChange
+        }
+      },
+      swipeInterval: null
     };
   },
-  mounted () {
+  computed: {
+    swiper() {
+      return this.$refs.mySwiper.swiper;
+    }
+  },
+  mounted() {
     this.init();
   },
   methods: {
-    init () {
+    init() {
       this.getInfo();
     },
-    getInfo () {
+    getInfo() {
       let api = `/course/service/book/share`;
       let params = {
         number: "541486963491839"
@@ -92,13 +114,13 @@ export default {
           this.day = data.registerDays;
           this.count = data.studyCount;
 
-          data.pages.forEach((value) => {
+          data.pages.forEach(value => {
             const item = {
               backImg: value.imgUrl,
               value: value.content,
               audioUrl: value.audioUrl,
               userAudioUrl: value.userAudioUrl
-            }
+            };
             this.data.push(item);
           });
           this.readingIndex = 1;
@@ -106,22 +128,24 @@ export default {
         }
       });
     },
-    goReading () {
+    goReading() {
       this.stratReading = true;
       this.readingIndex = 1;
       this.currentAudio = this.data[0].audioUrl;
     },
-    handleChange (index) {
+    handleChange() {
+      const index = this.swiper.activeIndex;
       this.readingIndex = index + 1;
       this.currentAudio = this.data[index].audioUrl;
-      //   document.getElementById('audio').play();
+      if (this.swipeInterval) {
+        clearInterval(this.swipeInterval);
+      }
     },
-    goBack () {
+    goBack() {
       this.stratReading = false;
     },
-    test () {
-      const audio = document.getElementById('audio');
-      audio.play();
+    audioEnd() {
+      this.swiper.slideNext();
     }
   }
 };
@@ -129,90 +153,90 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-  .book {
-    .book-title {
-      padding: 0 10%;
-      .book-title-icon {
-        border-radius: 50%;
-        height: 48px;
-        width: 48px;
-        background-color: #e5e5e5;
-        vertical-align: middle;
-        display: inline-block;
-        margin-right: 16px;
-      }
-      .book-title-name {
-        display: inline-block;
-        vertical-align: middle;
-        color: #333;
-      }
-    }
-    .book-des {
-      font-size: 14pt;
-      margin: 20pt 0;
-      .day-number {
-        font-size: 18pt;
-        font-style: normal;
-        color: #ffc300;
-      }
-    }
-    .book-body {
-      width: 180pt;
-      height: 180pt;
+.book {
+  .book-title {
+    padding: 0 10%;
+    .book-title-icon {
+      border-radius: 50%;
+      height: 48px;
+      width: 48px;
       background-color: #e5e5e5;
+      vertical-align: middle;
       display: inline-block;
-      border-radius: 5px;
-      .player-icon {
-        cursor: pointer;
-        margin-top: -20px;
-        padding-top: 50%;
-      }
+      margin-right: 16px;
     }
-    .book-tips {
-      color: #666;
-      margin-top: 24px;
-      font-size: 12pt;
+    .book-title-name {
+      display: inline-block;
+      vertical-align: middle;
+      color: #333;
     }
   }
-  .reading {
-    .reading-back {
-      text-align: left;
-      padding-left: 20pt;
-      img {
-        cursor: pointer;
-      }
+  .book-des {
+    font-size: 14pt;
+    margin: 20pt 0;
+    .day-number {
+      font-size: 18pt;
+      font-style: normal;
+      color: #ffc300;
     }
-    .reading-step {
-      font-size: 16pt;
+  }
+  .book-body {
+    width: 180pt;
+    height: 180pt;
+    background-color: #e5e5e5;
+    display: inline-block;
+    border-radius: 5px;
+    .player-icon {
+      cursor: pointer;
+      margin-top: -20px;
+      padding-top: 50%;
     }
-    .reading-swipe {
-      height: 320pt;
-    }
-    .breading-img {
-      width: 200pt;
-      height: 250pt;
-      display: inline-block;
-      background-color: #e5e5e5;
-      border-radius: 5px;
-      .background-img {
-        width: 200pt;
-        height: 250pt;
-      }
-    }
-    .reading-name {
-      margin: 20pt 0;
-    }
-    .reading-downlaod {
-      display: inline-block;
-      background-color: #ffc300;
-      color: #fff;
-      border-radius: 16pt;
-      height: 32pt;
-      width: 150pt;
-      line-height: 32pt;
-      text-align: center;
-      font-size: 13pt;
+  }
+  .book-tips {
+    color: #666;
+    margin-top: 24px;
+    font-size: 12pt;
+  }
+}
+.reading {
+  .reading-back {
+    text-align: left;
+    padding-left: 20pt;
+    img {
       cursor: pointer;
     }
   }
+  .reading-step {
+    font-size: 16pt;
+  }
+  .reading-swipe {
+    height: 320pt;
+  }
+  .breading-img {
+    width: 200pt;
+    height: 250pt;
+    display: inline-block;
+    background-color: #e5e5e5;
+    border-radius: 5px;
+    .background-img {
+      width: 200pt;
+      height: 250pt;
+    }
+  }
+  .reading-name {
+    margin: 20pt 0;
+  }
+  .reading-downlaod {
+    display: inline-block;
+    background-color: #ffc300;
+    color: #fff;
+    border-radius: 16pt;
+    height: 32pt;
+    width: 150pt;
+    line-height: 32pt;
+    text-align: center;
+    font-size: 13pt;
+    cursor: pointer;
+  }
+}
 </style>
