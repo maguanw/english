@@ -2,7 +2,10 @@
   <div>
     <div class="book" v-if="!stratReading">
       <div class="book-title">
-        <div class="book-title-icon"></div>
+        <div class="book-title-icon">
+          <img src="@/assets/user.png" width="48px" style="border-radius: 50%;" v-if="!userIcon" />
+          <img :src="userIcon" width="48px" style="border-radius: 50%;" v-if="userIcon" />
+        </div>
         <span class="book-title-name">{{name}} 在芒果少儿英语</span>
       </div>
       <div class="book-des">
@@ -55,6 +58,7 @@ export default {
   },
   data() {
     return {
+      userIcon: "",
       name: "",
       day: "",
       count: "",
@@ -97,6 +101,9 @@ export default {
           this.day = data.registerDays;
           this.count = data.studyCount;
           this.playImg = data.thumbUrl;
+          if (data.avatarUrl) {
+            this.userIcon = data.avatarUrl;
+          }
 
           data.pages.forEach(value => {
             const item = {
