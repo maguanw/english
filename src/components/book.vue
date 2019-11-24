@@ -13,7 +13,8 @@
         <span>个作品</span>
       </div>
       <div @click="goReading" class="book-body">
-        <img class="player-icon" src="../assets/start.png" width="40px" />
+        <img class="play-img" :src="playImg" />
+        <img class="player-icon" src="@/assets/start_reading.png" width="40px" />
       </div>
       <div class="book-tips">点击收听{{name}}小朋友的精彩作</div>
       <app-footer :des="'下载查看更多绘本'" :title="'芒果少儿英语'"></app-footer>
@@ -23,22 +24,6 @@
         <img @click="goBack" src="@/assets/back.png" width="20px" />
       </div>
       <div class="reading-step">{{readingIndex}} / {{data.length}}</div>
-      <!-- <div class="reading-swipe">
-        <mt-swipe
-          :auto="autoTime"
-          :continuous="false"
-          :show-indicators="false"
-          @change="handleChange"
-        >
-          <mt-swipe-item :key="index" v-for="(item,index) in data">
-            <div class="breading-img">
-              <img :src="item.backImg" class="background-img" />
-            </div>
-            <div class="reading-name">{{item.value}}</div>
-          </mt-swipe-item>
-        </mt-swipe>
-        <audio :src="currentAudio" autoplay id="audio"></audio>
-      </div>-->
       <div class="reading-swipe">
         <swiper :options="swiperOption" ref="mySwiper">
           <swiper-slide :key="index" v-for="(item,index) in data">
@@ -60,16 +45,13 @@
 import http from "@/utils/http.js";
 import AudioUi from "./audio-ui.vue";
 import AppFooter from "./common/footer.vue";
-import { Swipe, SwipeItem } from "mint-ui";
 import Swiper from "swiper";
 
 export default {
   name: "Share",
   components: {
     AudioUi,
-    AppFooter,
-    Swipe,
-    SwipeItem
+    AppFooter
   },
   data() {
     return {
@@ -78,6 +60,7 @@ export default {
       count: "",
       data: [],
       back: "<",
+      playImg: "",
       readingIndex: 0,
       autoTime: 6000,
       currentAudio: "",
@@ -113,6 +96,7 @@ export default {
           this.name = data.nickName;
           this.day = data.registerDays;
           this.count = data.studyCount;
+          this.playImg = data.thumbUrl;
 
           data.pages.forEach(value => {
             const item = {
@@ -182,14 +166,18 @@ export default {
   }
   .book-body {
     width: 180pt;
-    height: 180pt;
-    background-color: #e5e5e5;
     display: inline-block;
     border-radius: 5px;
+    position: relative;
+    .play-img {
+      width: 180pt;
+    }
     .player-icon {
+      position: absolute;
       cursor: pointer;
-      margin-top: -20px;
-      padding-top: 50%;
+      top: 50%;
+      left: 50%;
+      margin: -20px 0 0 -20px;
     }
   }
   .book-tips {
